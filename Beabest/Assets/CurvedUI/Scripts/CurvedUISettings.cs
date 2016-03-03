@@ -1,3 +1,5 @@
+//CurvedUI version 1.4.000 - release
+
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -199,6 +201,32 @@ public class CurvedUISettings : MonoBehaviour {
     #region PUBLIC
 
     /// <summary>
+    /// Adds the CurvedUIVertexEffect component to every child gameobject that requires it. 
+    /// CurvedUIVertexEffect creates the curving effect.
+    /// </summary>
+    public void AddEffectToChildren()
+    {
+        foreach (UnityEngine.UI.Graphic graph in GetComponentsInChildren<UnityEngine.UI.Graphic>(true))
+        {
+            if (graph.GetComponent<CurvedUIVertexEffect>() == null)
+            {
+                graph.gameObject.AddComponent<CurvedUIVertexEffect>();
+                graph.SetAllDirty();
+            }
+        }
+
+        //TextMeshPro experimental support. Go to CurvedUITMP.cs to learn how to enable it.
+#if CURVEDUI_TMP
+		foreach(TextMeshProUGUI tmp in GetComponentsInChildren<TextMeshProUGUI>(true)){
+			if(tmp.GetComponent<CurvedUITMP>() == null){
+				tmp.gameObject.AddComponent<CurvedUITMP>();
+				tmp.SetAllDirty();
+			}
+		}
+#endif
+    }
+
+    /// <summary>
     /// When in CUSTOM_RAY controller mode, RayCaster will use this worldspace Ray to determine which Canvas objects are being selected.
     /// </summary>
     public Ray CustomControllerRay {
@@ -209,6 +237,10 @@ public class CurvedUISettings : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns the position of the world space pointer in Canvas' local space. 
+    /// You can use it to position an image on world space mouse pointer's position.
+    /// </summary>
     public Vector2 WorldSpaceMouseInCanvasSpace {
         get { return worldSpaceMouseInCanvasSpace; }
         set { worldSpaceMouseInCanvasSpace = value;
@@ -216,6 +248,10 @@ public class CurvedUISettings : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// The change in position of the world space mouse in canvas' units.
+    /// Counted since the last frame.
+    /// </summary>
     public Vector2 WorldSpaceMouseInCanvasSpaceDelta {
         get { return worldSpaceMouseInCanvasSpace - lastWorldSpaceMouseOnCanvas; }
     }
@@ -263,7 +299,7 @@ public class CurvedUISettings : MonoBehaviour {
     }
 
     /// <summary>
-    /// Converts a point in Canvas space to a point on Curved surface in world space. \n
+    /// Converts a point in Canvas space to a point on Curved surface in world space units. 
     /// </summary>
     /// <param name="pos">Position on canvas in canvas space</param>
     /// <returns>
@@ -357,7 +393,7 @@ public class CurvedUISettings : MonoBehaviour {
 
 	/// <summary>
 	/// Tells you how big UI quads can get before they should be tesselate to look good on current canvas settings.
-	/// Used by CurvedUIVertexEffect
+	/// Used by CurvedUIVertexEffect to determine how many quads need to be created for each graphic.
 	/// </summary>
 	/// <returns>The tesslation size.</returns>
 	/// 
@@ -403,12 +439,11 @@ public class CurvedUISettings : MonoBehaviour {
 		}
 
 		return new Vector2(ret, ret2) / (UnmodifiedByQuality ? 1 : Mathf.Clamp(Quality, 0.01f, 10.0f));
-
 	}
 
 
 	/// <summary>
-	/// Tells you how many segmetens should the entire 360 deg. cyllinder consist of.
+	/// Tells you how many segmetens should the entire 360 deg. cyllinder or sphere consist of.
 	/// Used by CurvedUIVertexEffect
 	/// </summary>
 	/// <value>The base circle segments.</value>
@@ -428,6 +463,10 @@ public class CurvedUISettings : MonoBehaviour {
 
 	}
 
+    /// <summary>
+    /// Multiplier used to deremine how many segments a base curve of a shape has. 
+    /// Default 1. Lower values greatly increase performance. Higher values give you sharper curve.
+    /// </summary>
 	public float Quality{
 		get {return quality;}
 		set {
@@ -505,6 +544,10 @@ public class CurvedUISettings : MonoBehaviour {
 		}
 	}
 
+    /// <summary>
+    /// Can the canvas be interacted with?
+    /// Settings this to false will also destroy the canvas' collider.
+    /// </summary>
 	public bool Interactable {
 		get { return interactable; }
 		set { if(interactable != value){ 
@@ -517,7 +560,9 @@ public class CurvedUISettings : MonoBehaviour {
 		}
 	}
 
-
+    /// <summary>
+    /// Current controller mode. 
+    /// </summary>
     public CurvedUIController Controller {
         get { return controller; }
         set
@@ -530,6 +575,9 @@ public class CurvedUISettings : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Should the raycaster take other layers into account to determine if canvas has been interacted with.
+    /// </summary>
     public bool RaycastMyLayerOnly {
         get  { return raycastMyLayerOnly;  }
         set  {  raycastMyLayerOnly = value; }

@@ -61,23 +61,50 @@ public class CurvedUIRaycaster : GraphicRaycaster{
                 //get a ray from the center of world camera. used for gaze input
                 ray3D = new Ray(worldCamera.transform.position, worldCamera.transform.forward);
 
-              //  bool selectableUnderGaze = false; 
+
+//				string se = "Hstack: "+eventData.hovered.Count + ":";
+//				foreach (GameObject go in eventData.hovered) {
+//
+//					if (go.GetComponent<Selectable> () != null ) {
+//						se += go.name + ", ";
+//					}
+//				}
+//				Debug.Log (se);
+
+
+				bool selectableUnderGaze = false; 
+
+				//find if our selected object is still under gaze
+				foreach (GameObject go in eventData.hovered) {
+					if (go == eventData.selectedObject) {
+						selectableUnderGaze = true;
+						break;
+					}
+
+				}
+
+				//deselect if its not
+				if (!selectableUnderGaze)
+					eventData.selectedObject = null;
+
 
                 foreach (GameObject go in eventData.hovered)
                 {
-                    if (go.GetComponent<Selectable>() != null)
+					Graphic gph = go.GetComponent<Graphic> ();
+
+                    //go through only go that can be selected and are drawn by the canvas
+#if UNITY_5_1
+                    if (go.GetComponent<Selectable>() != null && gph != null && gph.depth != -1)
+#else
+                    if (go.GetComponent<Selectable>() != null && gph != null && gph.depth != -1 && gph.raycastTarget)
+#endif
                     {
-                        //selectableUnderGaze = true;
                         if(eventData.selectedObject != go) {
                             eventData.selectedObject = go;
                         }
                         break;
                     }
                 }
-                
-                ////deselect object if we moved gaze away from it.
-                //if (!selectableUnderGaze) eventData.selectedObject = null;
-
                 break;
             }
             case CurvedUISettings.CurvedUIController.WORLD_MOUSE:

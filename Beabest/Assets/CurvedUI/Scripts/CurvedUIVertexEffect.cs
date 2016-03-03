@@ -12,8 +12,15 @@ using TMPro;
 public partial class CurvedUIVertexEffect : BaseVertexEffect {
 
 	public override void ModifyVertices(List<UIVertex> verts) { 
-	    if (!this.IsActive() || mySettings == null || !mySettings.enabled)
-	        return;
+	    if (!this.IsActive())
+            return;
+
+        if (mySettings == null)  {
+            FindParentSettings();
+        }
+
+		if (mySettings == null || !mySettings.enabled)
+			return;
 
         if (tesselationRequired || curvingRequired || savedCurvedVerts == null || savedCurvedVerts.Count == 0) {
 	         ModifyVerts(verts);
@@ -38,9 +45,20 @@ public partial class CurvedUIVertexEffect : BaseMeshEffect {
   
 	public override void ModifyMesh (VertexHelper vh)
 	{
-		if (!this.IsActive() || mySettings == null || !mySettings.enabled)
+
+        if (!this.IsActive())
+            return;
+
+        if (mySettings == null)  {
+            FindParentSettings();
+        }
+
+		if (mySettings == null || !mySettings.enabled)
 			return;
 
+		//check for changes in text font material that would mean a retesselation in required to get fresh UV's
+		CheckTextFontMaterial ();
+	
         //if curving or tesselation is required, we'll run the code to calculate vertices.
         if (tesselationRequired || curvingRequired || SavedVertexHelper == null || SavedVertexHelper.currentVertCount == 0) {
 
@@ -104,35 +122,34 @@ public partial class CurvedUIVertexEffect : BaseMeshEffect {
     Vector3 savedUp;
     Vector2 savedRectSize;
     Color savedColor;
+    Vector2 savedTextUV0;
 
     List<UIVertex> tesselatedVerts;
 
 	#region LIFECYCLE
 
 	protected override void OnEnable(){
-		//find the settings object and its canvas.
-		if(mySettings == null){ 
-			mySettings = GetComponentInParent<CurvedUISettings>();
-
-			if(mySettings == null)return;
-
-			myCanvas = mySettings.GetComponent<Canvas>();
-			angle = mySettings.Angle;
-		}
+        //find the settings object and its canvas.
+        FindParentSettings();
 
 		//If there is an update to the graphic, we cant reuse old vertices, so new tesselation will be required
-		//TODO: Try tesselating only the vertex color data for Images.
 		if(GetComponent<Graphic>())
 			GetComponent<Graphic>().RegisterDirtyMaterialCallback(TesselationRequiredCallback);
 
+		if(GetComponent<Text>())
+			GetComponent<Text>().RegisterDirtyVerticesCallback(TesselationRequiredCallback);
 
         this.SetVerticesDirty();
 	}
 		
 	protected override void OnDisable(){
+		
 		//If there is an update to the graphic, we cant reuse old vertices, so new tesselation will be required
 		if(GetComponent<Graphic>())
 			GetComponent<Graphic>().UnregisterDirtyMaterialCallback(TesselationRequiredCallback);
+
+		if(GetComponent<Text>())
+			GetComponent<Text>().UnregisterDirtyVerticesCallback(TesselationRequiredCallback);
 
         this.SetVerticesDirty();
 	}
@@ -202,6 +219,8 @@ public partial class CurvedUIVertexEffect : BaseMeshEffect {
             
         }
 
+       
+
         //if we find we need to make a change in the mesh, set vertices dirty to trigger BaseMeshEffect firing.
         if (tesselationRequired || curvingRequired)
             SetVerticesDirty();
@@ -210,6 +229,36 @@ public partial class CurvedUIVertexEffect : BaseMeshEffect {
 
 	#endregion
 
+
+	#region CHECKS
+
+	void CheckTextFontMaterial(){
+		//we check for a sudden change in text's fontMaterialTexture. This is a very hacky way, but the only one working reliably for now.
+		if (GetComponent<Text> ()) {
+			if (GetComponent<Text> ().cachedTextGenerator.verts.Count > 0 && GetComponent<Text> ().cachedTextGenerator.verts [0].uv0 != savedTextUV0) {
+				//Debug.Log("tess req - texture");
+				savedTextUV0 = GetComponent<Text> ().cachedTextGenerator.verts [0].uv0;
+				tesselationRequired = true;
+			}
+		}
+	}
+
+    void FindParentSettings()
+    {
+        if (mySettings == null)
+        {
+            mySettings = GetComponentInParent<CurvedUISettings>();
+
+            if (mySettings == null) return;
+
+            myCanvas = mySettings.GetComponent<Canvas>();
+            angle = mySettings.Angle;
+        }
+    }
+	#endregion
+
+
+	#region VERTEX OPERATIONS
 	void ModifyVerts(List<UIVertex> verts) {
 
 		if(verts == null || verts.Count == 0)return;
@@ -266,6 +315,7 @@ public partial class CurvedUIVertexEffect : BaseMeshEffect {
 
 		}
     }
+#endregion 
 
 #region CURVING
 	/// <summary>
@@ -471,15 +521,35 @@ public partial class CurvedUIVertexEffect : BaseMeshEffect {
 	 		gph.SetVerticesDirty();
 	}
 
-	public bool TesselationRequired{
+
+    #region PUBLIC
+
+    /// <summary>
+    /// Force Mesh to be rebuild during canvas' next update loop.
+    /// </summary>
+    public void SetDirty()  {
+        TesselationRequired = true;
+    }
+
+    /// <summary>
+    /// Force vertices to be tesselated again from original vertices.
+    /// Set by CurvedUIVertexEffect when updating object's visual property.
+    /// </summary>
+    public bool TesselationRequired{
 		get { return tesselationRequired;}
 		set { tesselationRequired = value; } 
 	}
 
+    /// <summary>
+    /// Force vertices to be repositioned on the curved canvas.
+    /// set by CurvedUIVertexEffect when moving UI objects on canvas.
+    /// </summary>
     public bool CurvingRequired {
         get { return curvingRequired; }
         set { curvingRequired = value; }
     }
+
+    #endregion
 }
 
 
@@ -503,11 +573,21 @@ public static class CalculationMethods {
 	
 	public static float Remap (this int value, float from1, float to1, float from2, float to2) {
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+
 	}
-	
+		
+	public static float Remap (this int value, float from1, float to1) {
+		return Remap(value, from1, to1, 0, 1);
+	}
+
 	public static double Remap (this double value, double from1, double to1, double from2, double to2) {
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
+
+	public static double Remap (this double value, float from1, float to1) {
+		return Remap(value, from1, to1, 0, 1);
+	}
+
 	
 	public static float Clamp(this float value, float min, float max){
 		return Mathf.Clamp(value, min, max);
