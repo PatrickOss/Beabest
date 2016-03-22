@@ -35,13 +35,6 @@ public class CUI_ChangeValueOnHold : MonoBehaviour, IPointerDownHandler, IPointe
 		} else {
 			this.GetComponent<Slider>().normalizedValue += pressed ?  Time.deltaTime :  -Time.deltaTime;
 		}
-
-		if (IntroCG.alpha > 0) {
-
-			IntroCG.blocksRaycasts = true;
-		} else {
-			IntroCG.blocksRaycasts = false;
-		}
 	}
 
 	public void OnPointerDown(PointerEventData data){

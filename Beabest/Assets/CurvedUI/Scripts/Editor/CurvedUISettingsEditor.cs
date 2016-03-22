@@ -183,7 +183,22 @@ public class CurvedUISettingsEditor : Editor {
 	{
 		if(target == null)return;
 		
-		(target as CurvedUISettings).AddEffectToChildren();
+		foreach(UnityEngine.UI.Graphic graph in ((CurvedUISettings)target).GetComponentsInChildren<UnityEngine.UI.Graphic>(true)){
+			if(graph.GetComponent<CurvedUIVertexEffect>() == null){
+				graph.gameObject.AddComponent<CurvedUIVertexEffect>();
+				graph.SetAllDirty();
+			}
+		}
+
+		//TextMeshPro experimental support. Go to CurvedUITMP.cs to learn how to enable it.
+		#if CURVEDUI_TMP 
+		foreach(TextMeshProUGUI tmp in ((CurvedUISettings)target).GetComponentsInChildren<TextMeshProUGUI>(true)){
+			if(tmp.GetComponent<CurvedUITMP>() == null){
+				tmp.gameObject.AddComponent<CurvedUITMP>();
+				tmp.SetAllDirty();
+			}
+		}
+		#endif
 
 	}
 
