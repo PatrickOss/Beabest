@@ -7,6 +7,9 @@ using UnityEditor.UI;
 using TMPro;
 #endif 
 
+
+namespace CurvedUI { 
+
 [ExecuteInEditMode]
 [CustomEditor(typeof(CurvedUISettings))]
 public class CurvedUISettingsEditor : Editor {
@@ -52,7 +55,14 @@ public class CurvedUISettingsEditor : Editor {
 
                 break;
             }
-            case CurvedUISettings.CurvedUIShape.RING: {
+            case CurvedUISettings.CurvedUIShape.CYLINDER_VERTICAL:
+            {
+                myTarget.Angle = EditorGUILayout.IntSlider("Angle", myTarget.Angle, -360, 360);
+                myTarget.PreserveAspect = EditorGUILayout.Toggle("Preserve Aspect", myTarget.PreserveAspect);
+
+                break;
+            }
+                case CurvedUISettings.CurvedUIShape.RING: {
                 myTarget.RingExternalDiameter = Mathf.Clamp(EditorGUILayout.IntField("External Diameter", myTarget.RingExternalDiameter), 1, 100000);
                 myTarget.Angle = EditorGUILayout.IntSlider("Angle", myTarget.Angle, 0, 360);
                 myTarget.RingFill = EditorGUILayout.Slider("Fill", myTarget.RingFill, 0.0f, 1.0f);
@@ -183,39 +193,22 @@ public class CurvedUISettingsEditor : Editor {
 	{
 		if(target == null)return;
 		
-		foreach(UnityEngine.UI.Graphic graph in ((CurvedUISettings)target).GetComponentsInChildren<UnityEngine.UI.Graphic>(true)){
-			if(graph.GetComponent<CurvedUIVertexEffect>() == null){
-				graph.gameObject.AddComponent<CurvedUIVertexEffect>();
-				graph.SetAllDirty();
-			}
-		}
-
-		//TextMeshPro experimental support. Go to CurvedUITMP.cs to learn how to enable it.
-		#if CURVEDUI_TMP 
-		foreach(TextMeshProUGUI tmp in ((CurvedUISettings)target).GetComponentsInChildren<TextMeshProUGUI>(true)){
-			if(tmp.GetComponent<CurvedUITMP>() == null){
-				tmp.gameObject.AddComponent<CurvedUITMP>();
-				tmp.SetAllDirty();
-			}
-		}
-		#endif
+		(target as CurvedUISettings).AddEffectToChildren();
 
 	}
 
-    //yes, im going to implement contact via email straight from the editor. Im going to have best customer support you have ever seen in unity asset.
-    void SendEmail()
-    {
-        //string email = "curvedui@chisely.com";
-        //string subject = MyEscapeURL("My Subject");
-        //string body = MyEscapeURL("My Body\r\nFull of non-escaped chars");
-        //Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
-        //Application.OpenURL("mailto:" + email);
-
-       Application.OpenURL("https://unity3diy.blogspot.com");
-    }
-    string MyEscapeURL(string url)
-    {
-        return WWW.EscapeURL(url).Replace("+", "%20");
-    }
+    //void SendEmail()
+    //{
+    //    string email = "curvedui@chisely.com";
+    //    string subject = MyEscapeURL("My Subject");
+    //    string body = MyEscapeURL("My Body\r\nFull of non-escaped chars");
+    //    Application.OpenURL("mailto:" + email);
+    //}
+    //string MyEscapeURL(string url)
+    //{
+    //    return WWW.EscapeURL(url).Replace("+", "%20");
+    //}
 
 }
+}
+
