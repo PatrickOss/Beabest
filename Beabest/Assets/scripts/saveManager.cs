@@ -15,16 +15,18 @@ public class saveManager : MonoBehaviour
         health = GameObject.FindWithTag("Health");
         player = GameObject.FindWithTag("Player");              
         DontDestroyOnLoad(health);
-        DontDestroyOnLoad(player);
+        DontDestroyOnLoad(player); 
         loader();       
+    }
+    void Start()
+    {
+        playerhealth = GameObject.Find("Health");
     }
     void loader()
     {
-
       test = playerhealth.GetComponent<playerhealth>();
       test.healtbar = GameObject.Find("hpp");
       test.texthealth = GameObject.Find("hpptext");
       healtex = test.texthealth.GetComponent<Text>(); ;
-
     }
 }

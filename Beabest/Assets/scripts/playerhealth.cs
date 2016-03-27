@@ -14,13 +14,9 @@ public class playerhealth : MonoBehaviour {
 
     void Awake()
     {
-        saverObject = GameObject.Find("saver");
-        Saver = saverObject.GetComponent<saveManager>();
-        healtbar = GameObject.Find("hpp");
-        texthealth = GameObject.Find("hpptext");
-        
+        saverObject = GameObject.FindWithTag("Saver");
+        Saver = saverObject.GetComponent<saveManager>();    
     }
-
     void Update()
     {
         decraser();
@@ -40,8 +36,7 @@ public class playerhealth : MonoBehaviour {
     void decraser()
     {
         float calc_Health = currenthealth / maxhealth;
-        SetHealthBar(calc_Health);
-        
+        SetHealthBar(calc_Health);        
     }
     public void SetHealthBar(float healt)
     {
