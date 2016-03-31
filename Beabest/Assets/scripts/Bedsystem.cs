@@ -7,32 +7,37 @@ public class Bedsystem : MonoBehaviour {
     public GameObject[] BedCanvases;
     public GameObject DAYNIGHT;
     public DayNightController daynight;
-    public GameObject sleeperObjec;
-    public Image sleeper;
+    public GameObject sleeperObjec;  
     RaycastHit hit;
     bool sleeps;
-    float timemultipler = 0.1f;
-    public  float time;
-
+    public CanvasGroup group;
+    public float time;
+    private float timespeeder = .1f;
     void Start()
     {
-        sleeperObjec = GameObject.Find("Sleeper");
-        sleeper = sleeperObjec.GetComponent<Image>();
+        group = group.GetComponent<CanvasGroup>();
+        sleeperObjec = GameObject.Find("Sleeper");       
         DAYNIGHT = GameObject.FindWithTag("Daynight");
         daynight = DAYNIGHT.GetComponent<DayNightController>();
-    }
-    	
+    }   	
 	void Update ()
-    {
-        time += Time.deltaTime * timemultipler;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (time >= .4f)
+    {      
+        if (sleeps == true)
         {
-            antisleeping();
+            time += Time.deltaTime * timespeeder;
+            group.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);           
+        }
+        if (time > .4)
+        {
+            sleeps = false;
+            time = 0;
+        }
+        if (sleeps == false)
+        {
+            group.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);            
         }
 
-       {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);     
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity)) // obliczam punkt trafienia
             {
                 Debug.DrawLine(ray.origin, hit.point, Color.red, 100);
@@ -51,8 +56,7 @@ public class Bedsystem : MonoBehaviour {
                         BedCanvases[i].SetActive(false);
                     }
                 }
-            }
-        }       
+            }              
 	}
     void betterBed()
     {
@@ -63,8 +67,6 @@ public class Bedsystem : MonoBehaviour {
             {
                 sleepAndBuff();
                 sleeps = true;
-                sleeping();                
-                time = 0f;
             }
         }
         else
@@ -78,8 +80,6 @@ public class Bedsystem : MonoBehaviour {
             {               
                 sleepAndBuff();
                 sleeps = true;
-                sleeping();               
-                time = 0f;
             }
         }
         else
@@ -95,9 +95,7 @@ public class Bedsystem : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Q))
             {               
                 sleep();
-                sleeps = true;
-                sleeping();
-                time = 0f;                
+                sleeps = true;       
             }
         }
         else
@@ -111,9 +109,7 @@ public class Bedsystem : MonoBehaviour {
             {
                 
                 sleep();
-                sleeps = true;
-                sleeping();
-                time = 0f;               
+                sleeps = true;                                      
             }
         }
         else
@@ -129,18 +125,5 @@ public class Bedsystem : MonoBehaviour {
     void sleep()
     {
         daynight.currentTime = 8.00f;      
-    }
-    void sleeping()
-    {
-        if (sleeps)
-        {           
-            sleeper.color = Color.Lerp(Color.black, Color.clear, Time.deltaTime * .00001f);
-            sleeps = false;
-        }                          
-    }
-    void antisleeping()
-    {
-        sleeper.color = Color.Lerp(Color.clear, Color.black, Time.deltaTime * .00001f);
-        sleeps = true;
-    }  
+    } 
 }
