@@ -2,19 +2,29 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Bedsystem : MonoBehaviour {
+public class Bedsystem : MonoBehaviour
+{
 
     public GameObject[] BedCanvases;
     public GameObject DAYNIGHT;
     public DayNightController daynight;
     public GameObject sleeperObjec;  
     RaycastHit hit;
-    bool sleeps;
+    public bool sleeps;
     public CanvasGroup group;
     public float time;
     private float timespeeder = .1f;
+    public CanvasGroup presse1;
+    public CanvasGroup presse2;
+    public CanvasGroup presse3;
+    public CanvasGroup presse4;
+
     void Start()
     {
+        presse1 = BedCanvases[0].GetComponent<CanvasGroup>();
+        presse2 = BedCanvases[1].GetComponent<CanvasGroup>();
+        presse3 = BedCanvases[2].GetComponent<CanvasGroup>();
+        presse4 = BedCanvases[3].GetComponent<CanvasGroup>();
         group = group.GetComponent<CanvasGroup>();
         sleeperObjec = GameObject.Find("Sleeper");       
         DAYNIGHT = GameObject.FindWithTag("Daynight");
@@ -51,10 +61,10 @@ public class Bedsystem : MonoBehaviour {
                 }
                 if (hit.collider.tag == "House")
                 {
-                    for (int i = 0; i <= 3; i++)
-                    {
-                        BedCanvases[i].SetActive(false);
-                    }
+                presse1.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
+                presse2.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
+                presse3.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
+                presse4.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
                 }
             }              
 	}
@@ -62,7 +72,8 @@ public class Bedsystem : MonoBehaviour {
     {
         if (hit.collider.name == "BetterBed1")
         {
-            BedCanvases[0].SetActive(true);
+            presse1.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);
+
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 sleepAndBuff();
@@ -71,11 +82,12 @@ public class Bedsystem : MonoBehaviour {
         }
         else
         {
-            BedCanvases[0].SetActive(false);
+            presse1.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
         }
-        if (hit.collider.name == "betterBed2")
+        if (hit.collider.name == "BetterBed2")
         {
-            BedCanvases[1].SetActive(true);
+            presse2.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);
+
             if (Input.GetKeyDown(KeyCode.Q))
             {               
                 sleepAndBuff();
@@ -84,14 +96,15 @@ public class Bedsystem : MonoBehaviour {
         }
         else
         {
-            BedCanvases[1].SetActive(false);
+            presse2.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
         }
     }
     void worseBed()
     {
         if (hit.collider.name == "worseBed1")
         {
-            BedCanvases[2].SetActive(true);
+            presse3.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);
+
             if (Input.GetKeyDown(KeyCode.Q))
             {               
                 sleep();
@@ -100,11 +113,11 @@ public class Bedsystem : MonoBehaviour {
         }
         else
         {
-            BedCanvases[2].SetActive(false);
+            presse3.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
         }
         if (hit.collider.name == "worseBed2")
         {
-            BedCanvases[3].SetActive(true);
+            presse4.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 
@@ -114,7 +127,7 @@ public class Bedsystem : MonoBehaviour {
         }
         else
         {
-            BedCanvases[3].SetActive(false);
+            presse4.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
         }
     }
     void sleepAndBuff()

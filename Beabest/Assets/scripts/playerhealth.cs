@@ -9,13 +9,31 @@ public class playerhealth : MonoBehaviour {
     public int currenthealth = 100;
     public GameObject healtbar;
     public GameObject texthealth;
+    public Text healtex;
     public GameObject saverObject;
     public saveManager Saver;
+    public static playerhealth instance;
+    public static GameObject player;
 
     void Awake()
     {
-        saverObject = GameObject.FindWithTag("Saver");
-        Saver = saverObject.GetComponent<saveManager>();    
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        else if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+       
+        DontDestroyOnLoad(gameObject);
+       
+        healtbar = GameObject.Find("hpp");
+        texthealth = GameObject.Find("hpptext");
+        healtex = texthealth.GetComponent<Text>();
+        //saverObject = GameObject.FindWithTag("Saver");
+        //Saver = saverObject.GetComponent<saveManager>();    
     }
     void Update()
     {

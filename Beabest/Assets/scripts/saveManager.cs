@@ -27,6 +27,6 @@ public class saveManager : MonoBehaviour
       test = playerhealth.GetComponent<playerhealth>();
       test.healtbar = GameObject.Find("hpp");
       test.texthealth = GameObject.Find("hpptext");
-      healtex = test.texthealth.GetComponent<Text>(); ;
+      healtex = test.texthealth.GetComponent<Text>(); 
     }
 }
