@@ -32,8 +32,8 @@ public class playerhealth : MonoBehaviour {
         healtbar = GameObject.Find("hpp");
         texthealth = GameObject.Find("hpptext");
         healtex = texthealth.GetComponent<Text>();
-        //saverObject = GameObject.FindWithTag("Saver");
-        //Saver = saverObject.GetComponent<saveManager>();    
+        saverObject = GameObject.FindWithTag("Saver");
+        Saver = saverObject.GetComponent<saveManager>();    
     }
     void Update()
     {

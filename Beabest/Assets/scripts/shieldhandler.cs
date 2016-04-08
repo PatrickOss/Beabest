@@ -7,7 +7,7 @@ public class shieldhandler : MonoBehaviour {
     public GameObject startshield;
     public GameObject endshield;
 
-    bool clicked = false;
+  public  bool clicked = false;
     void Update()
     {
         if (Input.GetMouseButtonDown(1))
