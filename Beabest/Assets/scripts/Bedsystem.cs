@@ -4,16 +4,20 @@ using UnityEngine.UI;
 
 public class Bedsystem : MonoBehaviour
 {
+    public bool enterder;
 
     public GameObject[] BedCanvases;
     public GameObject DAYNIGHT;
+    public GameObject sleeperObjec;
     public DayNightController daynight;
-    public GameObject sleeperObjec;  
+
+    public GameObject sleeperObject;  
     RaycastHit hit;
     public bool sleeps;
-    public CanvasGroup group;
+    
     public float time;
     private float timespeeder = .1f;
+    public CanvasGroup group;
     public CanvasGroup presse1;
     public CanvasGroup presse2;
     public CanvasGroup presse3;
@@ -70,7 +74,7 @@ public class Bedsystem : MonoBehaviour
 	}
     void betterBed()
     {
-        if (hit.collider.name == "BetterBed1")
+        if (hit.collider.name == "BetterBed1" && enterder)
         {
             presse1.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);
 
@@ -84,7 +88,7 @@ public class Bedsystem : MonoBehaviour
         {
             presse1.alpha -= Mathf.Lerp(0, 1, Time.deltaTime * 1f);
         }
-        if (hit.collider.name == "BetterBed2")
+        if (hit.collider.name == "BetterBed2" && enterder)
         {
             presse2.alpha += Mathf.Lerp(0, 1, Time.deltaTime * 1f);
 
