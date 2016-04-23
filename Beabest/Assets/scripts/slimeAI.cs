@@ -3,78 +3,77 @@ using System.Collections;
 using Pathfinding;
 using Pathfinding.RVO;
 
-public class slimeAI : AIPath
+public class slimeAI : MonoBehaviour
 {
-    public Animation anim;
-
-    /* * Minimum velocity for moving */
-    public float sleepVelocity = 0.4F;
-
-    /* * Speed relative to velocity with which to play animations */
-    public float animationSpeed = 0.2F;
-
-    public new void Start()
-    { 
-        base.Start();
-    }
-
-    /* * Point for the last spawn of #endOfPathEffect */
-    protected Vector3 lastTarget;
-
-    public override Vector3 GetFeetPosition()
+    //The point to move to
+    public GameObject targett;
+    public Vector3 targetPosition;
+    private Seeker seeker;
+    private CharacterController controller;
+    //The calculated path
+    public Path path;
+    //The AI's speed per second
+    public float speed = 100;
+    //The max distance from the AI to a waypoint for it to continue to the next waypoint
+    public float nextWaypointDistance = 3;
+    //The waypoint we are currently moving towards
+    private int currentWaypoint = 0;
+    public float repathRate = 0.5f;
+    private float lastRepath = -9999;
+    public void Start()
     {
-        return tr.position;
+        targetPosition = targett.transform.localPosition;
+        seeker = GetComponent<Seeker>();
+        controller = GetComponent<CharacterController>();
+        //Start a new path to the targetPosition, return the result to the OnPathComplete function
+        //seeker.StartPath (transform.position,targetPosition, OnPathComplete);
     }
-
-    new void Update()
+    public void OnPathComplete(Path p)
     {
-        //Get velocity in world-space
-        Vector3 velocity;
-
-        if (canMove)
+        p.Claim(this);
+        if (!p.error)
         {
-            //Calculate desired velocity
-            Vector3 dir = CalculateVelocity(GetFeetPosition());
-            //Rotate towards targetDirection (filled in by CalculateVelocity)
-            RotateTowards(targetDirection);
-
-            dir.y = 0;
-            if (dir.sqrMagnitude > sleepVelocity * sleepVelocity)
-            {
-                //If the velocity is large enough, move
-            }
-            else
-            {
-                //Otherwise, just stand still (this ensures gravity is applied)
-                dir = Vector3.zero;
-            }
-
-            if (controller != null)
-            {
-                controller.SimpleMove(dir);
-                velocity = controller.velocity;
-            }
-            else
-            {
-                Debug.LogWarning("No NavmeshController or CharacterController attached to GameObject");
-                velocity = Vector3.zero;
-            }
+            if (path != null) path.Release(this);
+            path = p;
+            //Reset the waypoint counter
+            currentWaypoint = 0;
         }
         else
         {
-            velocity = Vector3.zero;
+            p.Release(this);
+            Debug.Log("Oh noes, the target was not reachable: " + p.errorLog);
         }
-        //Calculate the velocity relative to this transform's orientation
-        Vector3 relVelocity = tr.InverseTransformDirection(velocity);
-        relVelocity.y = 0;
-
-        if (velocity.sqrMagnitude <= sleepVelocity * sleepVelocity)
+        //seeker.StartPath (transform.position,targetPosition, OnPathComplete);
+    }
+    public void Update()
+    {
+        if (Time.time - lastRepath > repathRate && seeker.IsDone())
         {
-            
+            lastRepath = Time.time + Random.value * repathRate * 0.5f;
+            seeker.StartPath(transform.position, targetPosition, OnPathComplete);
         }
-        else
+        if (path == null)
         {
-            float speed = relVelocity.z;         
+            //We have no path to move after yet
+            return;
+        }
+        if (currentWaypoint > path.vectorPath.Count) return;
+        if (currentWaypoint == path.vectorPath.Count)
+        {
+            Debug.Log("End Of Path Reached");
+            currentWaypoint++;
+            return;
+        }
+        //Direction to the next waypoint
+        Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+        dir *= speed;// * Time.deltaTime;
+        //transform.Translate (dir);
+        controller.SimpleMove(dir);
+        //if (Vector3.Distance (transform.position,path.vectorPath[currentWaypoint]) < nextWaypointDistance) {
+        if ((transform.position - path.vectorPath[currentWaypoint]).sqrMagnitude < nextWaypointDistance * nextWaypointDistance)
+        {
+            currentWaypoint++;
+            return;
         }
     }
 }

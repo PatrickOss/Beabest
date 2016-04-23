@@ -6,13 +6,58 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Armature
+    100004: finger1-1
+    100006: finger2-1
+    100008: finger2-2
+    100010: finger2-3
+    100012: finger3-1
+    100014: finger3-2
+    100016: finger3-3
+    100018: finger4-1
+    100020: finger4-2
+    100022: finger4-3
+    100024: finger_1-2
+    100026: finger_1-3
+    100028: handBase
+    100030: Plane005
+    100032: thumb
+    100034: thumbmiddle
+    100036: thumbtop
+    100038: top_base_left
+    100040: topbasemiddle
+    100042: topbasemiddle2
+    100044: topbaseright
     400000: //RootNode
+    400002: Armature
+    400004: finger1-1
+    400006: finger2-1
+    400008: finger2-2
+    400010: finger2-3
+    400012: finger3-1
+    400014: finger3-2
+    400016: finger3-3
+    400018: finger4-1
+    400020: finger4-2
+    400022: finger4-3
+    400024: finger_1-2
+    400026: finger_1-3
+    400028: handBase
+    400030: Plane005
+    400032: thumb
+    400034: thumbmiddle
+    400036: thumbtop
+    400038: top_base_left
+    400040: topbasemiddle
+    400042: topbasemiddle2
+    400044: topbaseright
     2300000: //RootNode
     3300000: //RootNode
     4300000: Plane005
     6400000: //RootNode
     7400000: Default Take
     9500000: //RootNode
+    13700000: Plane005
   materials:
     importMaterials: 1
     materialName: 0

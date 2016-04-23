@@ -39,7 +39,7 @@ public class BasicSwingSwrod : MonoBehaviour
                     //sword animation code
                     if (animnumber == 0)
                     {
-                        anim.Play("swingSwordOne", -1, 0f);
+                        anim.Play("swingSwordTwo", -1, 0f);
                     }
                     if (animnumber == 1)
                     {
@@ -47,14 +47,14 @@ public class BasicSwingSwrod : MonoBehaviour
                     }
                     if (animnumber == 2)
                     {
-                        anim.Play("swingSwordThree", -1, 0f);
+                        anim.Play("swingSwordTwo", -1, 0f);
                     }
                 }
                 if (ifAxe && ifSword == false)//checks if player weights axe
                 {
                     //axe animation code
                 }
-            }
+            } 
         }
     }
 }
