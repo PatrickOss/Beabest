@@ -146,7 +146,7 @@ public class AIPath : MonoBehaviour {
 	/** Initializes reference variables.
 	 * If you override this function you should in most cases call base.Awake () at the start of it.
 	 * */
-	protected virtual void Awake () {
+	public virtual void Awake () {
 		seeker = GetComponent<Seeker>();
 
 		//This is a simple optimization, cache the transform component lookup

@@ -4,27 +4,20 @@ using UnityEngine.UI;
 
 public class saveManager : MonoBehaviour
 {
-    public GameObject health;
+    
     public GameObject player;
-    public GameObject playerhealth;
     public Text healtex;
     playerhealth test;
     void Awake()
     {
-        playerhealth = GameObject.Find("Health");
-        health = GameObject.FindWithTag("Health");
-        player = GameObject.FindWithTag("Player");              
-        DontDestroyOnLoad(health);
+        player = GameObject.FindWithTag("Player");                  
         DontDestroyOnLoad(player); 
         loader();       
     }
-    void Start()
-    {
-        playerhealth = GameObject.Find("Health");
-    }
+   
     void loader()
     {
-      test = playerhealth.GetComponent<playerhealth>();
+      test = player.GetComponent<playerhealth>();
       test.healtbar = GameObject.Find("hpp");
       test.texthealth = GameObject.Find("hpptext");
       healtex = test.texthealth.GetComponent<Text>(); 
