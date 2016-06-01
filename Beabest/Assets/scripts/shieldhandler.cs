@@ -6,6 +6,7 @@ public class shieldhandler : MonoBehaviour {
     public GameObject shield;
     public GameObject startshield;
     public GameObject endshield;
+    public bool animIsPlaing = false;
 
   public  bool clicked = false;
     void Update()

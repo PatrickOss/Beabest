@@ -17,12 +17,7 @@ public class BasicSwingSwrod : MonoBehaviour
     public int animnumber; //which animation to play?
     void Start()
     {
-        character = GameObject.Find("FirstPersonCharacter");
-        pauserGameobject = GameObject.Find("FPSController");
-
-        pauser = pauserGameobject.GetComponent<PauseMenuMy>();
-        shieldIsOn = character.GetComponent<shieldhandler>();
-        anim = GetComponent<Animator>();
+        loader();
     }
 
     void Update()
@@ -47,7 +42,7 @@ public class BasicSwingSwrod : MonoBehaviour
                     }
                     if (animnumber == 2)
                     {
-                        anim.Play("swingSwordTwo", -1, 0f);
+                        anim.Play("swingSwordTwo", -1, 0f);                      
                     }
                 }
                 if (ifAxe && ifSword == false)//checks if player weights axe
@@ -56,5 +51,21 @@ public class BasicSwingSwrod : MonoBehaviour
                 }
             } 
         }
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("swingSwordTwo"))
+        {
+            shieldIsOn.animIsPlaing = true;
+        }
+        else
+        {
+            shieldIsOn.animIsPlaing = false;
+        }
+    }
+    void loader ()
+    {
+        character = GameObject.Find("FirstPersonCharacter");
+        pauserGameobject = GameObject.Find("FPSController");
+        pauser = pauserGameobject.GetComponent<PauseMenuMy>();
+        shieldIsOn = character.GetComponent<shieldhandler>();
+        anim = GetComponent<Animator>();
     }
 }

@@ -12,19 +12,20 @@ public class dynamicWeatherScript : MonoBehaviour {
     public int randomcloud; // lets take random model
     public int i = 0; // variable for loop
     public int howManyClouds; // how many clouds we should create?
+    public int HowBigSquare = 1000; //how big the square should be?
     int rando = 0; // it's random number which will be used for making fade in and out effect later in the script
 
     public float timer = 0;
-   
+
     public Vector3 randomposition; //position of cloud
     public Vector3 randomrotation; // rotation of cloud for calculating
-    
+
     public Quaternion RandomRotation; // actuall rotation of cloud
 
-    Color col; // color for fading in and out
-    Renderer rend;
-
-    public bool shouldfade = false;
+    void Awake()
+    {
+        SechForStartPoint();
+    }
 
     void Update()
     {
@@ -35,71 +36,63 @@ public class dynamicWeatherScript : MonoBehaviour {
         }
         if (timer >= 4)
         {
-            shouldfade = true;    
             rando = Random.Range(0, CloudsList.ToArray().Length);
-            rend = CloudsList[rando].GetComponent<Renderer>();
-            col = rend.material.color;                                                
-        }
-        if (shouldfade)
-        {
-            FadeOut();      
-            if (timer >= 6)
-            {
-                RandomizePosition();
-                shouldfade = false;
-                timer = 0;
-            }         
-        }
-        if (shouldfade == false)
-        {
-            FadeIn();
+
+            RandomizePosition();
+
+            timer = 0;
         }
     }
-    void Generate ()
-    {        
-               RandomizeClouds();             
-               CalculatePosition();
-               CalculateRotation();
-               ToQuaternion();
-               GameObject cloudClone = Instantiate(clouds[randomcloud], randomposition, RandomRotation) as GameObject;
-               CloudsList.Add(cloudClone);             
-               i++;                                       
-    }
-    
-    void CalculatePosition ()
+    void Generate()
     {
-        randomposition.x = Random.Range(StartPoint.transform.position.x - 500, StartPoint.transform.position.x + 500);
-        randomposition.y = Random.Range(StartPoint.transform.position.y - 20, StartPoint.transform.position.y + 20);
-        randomposition.z = Random.Range(StartPoint.transform.position.z - 500, StartPoint.transform.position.z + 500);
+        RandomizeClouds();
+        CalculatePosition();
+        CalculateRotation();
+        ToQuaternion();
+        GameObject cloudClone = Instantiate(clouds[randomcloud], randomposition, RandomRotation) as GameObject;
+        CloudsList.Add(cloudClone);
+        i++;
     }
-    void CalculateRotation ()
+
+    void CalculatePosition()
+    {
+        randomposition.x = Random.Range(StartPoint.transform.position.x - HowBigSquare, StartPoint.transform.position.x + HowBigSquare);
+        randomposition.y = Random.Range(StartPoint.transform.position.y - 20, StartPoint.transform.position.y + 20);
+        randomposition.z = Random.Range(StartPoint.transform.position.z - HowBigSquare, StartPoint.transform.position.z + HowBigSquare);
+
+        randomposition.x += 50;
+        randomposition.z += 50;
+    }
+    void CalculateRotation()
     {
         randomrotation.x = Random.Range(0, 360);
         randomrotation.y = Random.Range(0, 360);
         randomrotation.z = Random.Range(0, 360);
-    }  
-    void RandomizeClouds ()
+    }
+    void RandomizeClouds()
     {
         randomcloud = Random.Range(0, clouds.Length);
     }
-    void RandomizePosition ()
+    void RandomizePosition()
     {
 
         CalculatePosition();
-        CloudsList[rando].transform.position = randomposition;      
+        CloudsList[rando].transform.position = randomposition;
     }
-    void ToQuaternion ()
+    void ToQuaternion()
     {
         RandomRotation = Quaternion.Euler(randomrotation.x, randomrotation.y, randomrotation.z);
     }
-
-    void FadeIn ()
-    {           
-        col.a += Mathf.Lerp(0, 255, Time.deltaTime * 2);
-    }
-    void FadeOut ()
+    void SechForStartPoint()
     {
-        col.a -= Mathf.Lerp(0, 255, Time.deltaTime * 2);
+        if (StartPoint == null)
+        {
+            StartPoint = GameObject.Find("cloud1");
+        }
+        else
+        {
+            return;
+        }
     }
 }
 

@@ -19,10 +19,10 @@ public class lightcontroller : MonoBehaviour {
     {
         if (daynight.currentTime <= daytime && daynight.currentTime >= nighttime)
         {
-            foreach (GameObject lights in cityLight)
-            {
-                lights.SetActive(false);
-            }
+           // foreach (GameObject lights in cityLight)
+            //{
+               // lights.SetActive(false);
+            //}
         }
         else
         {

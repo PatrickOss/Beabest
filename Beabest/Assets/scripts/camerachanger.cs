@@ -3,7 +3,7 @@ using System.Collections;
 
 public class camerachanger : MonoBehaviour {
 
-    bool przelaczona = false;
+    bool przelaczona = true;
     public GameObject camera1;
     public GameObject camera2;
 

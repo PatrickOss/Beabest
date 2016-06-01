@@ -32,7 +32,7 @@ public class Bedsystem : MonoBehaviour
         group = group.GetComponent<CanvasGroup>();
         sleeperObjec = GameObject.Find("Sleeper");       
         DAYNIGHT = GameObject.FindWithTag("Daynight");
-        daynight = DAYNIGHT.GetComponent<DayNightController>();
+        
     }   	
 	void Update ()
     {      

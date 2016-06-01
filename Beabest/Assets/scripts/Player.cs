@@ -10,7 +10,11 @@ public class Player : MonoBehaviour
         get { return instance; }
     }
 
-    private void Awake()
+    void Awake()
+    {
+        backUpThePlayer();
+    }
+    void backUpThePlayer()
     {
         // If no Player ever existed, we are it.
         if (instance == null)

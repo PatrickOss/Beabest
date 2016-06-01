@@ -7,13 +7,13 @@ public class Spawn : MonoBehaviour
     public Bedsystem beds;
     public GameObject group;
     public GameObject daynight;
-    public DayNightController controller;
+ 
     void Awake ()
     {
         player = GameObject.FindWithTag("Player");
         group = GameObject.FindWithTag("sleepingcanvas");
         daynight = GameObject.FindWithTag("Daynight");
-        controller = daynight.GetComponent<DayNightController>();
+        
         beds = player.GetComponent<Bedsystem>();
         loader();
         player.transform.localPosition = gameObject.transform.localPosition;
@@ -35,7 +35,7 @@ public class Spawn : MonoBehaviour
         beds.presse4 = beds.BedCanvases[3].GetComponent<CanvasGroup>();
         //looking for daynightsystem
         beds.DAYNIGHT = daynight;
-        beds.daynight = controller;
+        
 
 
     }	

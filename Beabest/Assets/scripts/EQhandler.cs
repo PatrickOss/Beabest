@@ -6,11 +6,19 @@ public class EQhandler : MonoBehaviour {
     public GameObject shieldsystem;
     public GameObject EQsystem;
 
-    bool changed = false;
+    public string ShieldTag;
+    public string EQTag;
+
+
+    public bool changed = false;
+
+    void Awake()
+    {
+        loader();
+    }
 
 	void Update ()
-    {
-	
+    {	
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             changed = !changed;
@@ -19,12 +27,19 @@ public class EQhandler : MonoBehaviour {
         {
             shieldsystem.SetActive(true);
             EQsystem.SetActive(false);
+          
         }
         else
         {
             shieldsystem.SetActive(false);
             EQsystem.SetActive(true);
+        
         }
 
 	}
+    void loader()
+    {
+        shieldsystem = GameObject.FindWithTag(ShieldTag);
+        EQsystem = GameObject.FindWithTag(EQTag);
+    }
 }

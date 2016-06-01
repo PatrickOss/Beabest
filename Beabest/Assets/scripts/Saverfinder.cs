@@ -14,8 +14,7 @@ public class Saverfinder : MonoBehaviour {
         saver = GameObject.Find("saver");
         savemanager = saver.GetComponent<saveManager>();
         testing = Health.GetComponent<playerhealth>();
-        testing.saverObject = saver;
-        testing.Saver = savemanager;        
+      
     }
 	
 }
