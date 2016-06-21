@@ -15,6 +15,10 @@ public class EnemyHP : MonoBehaviour {
         {          
             currenthealth = 0;
         }
+        if (currenthealth == 0)
+        {
+            Destroy(transform.parent.gameObject);
+        }
         if (currenthealth >= 100)
         {          
             currenthealth = (int)maxhealth;

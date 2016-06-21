@@ -33,7 +33,7 @@ Platform assembly: G:\modele\LPPM2\Beabest\Beabest\justVRTest_Data\Managed\DOTwe
 Loading G:\modele\LPPM2\Beabest\Beabest\justVRTest_Data\Managed\DOTween46.dll into Unity Child Domain
 Platform assembly: G:\modele\LPPM2\Beabest\Beabest\justVRTest_Data\Managed\DOTween50.dll (this message is harmless)
 Loading G:\modele\LPPM2\Beabest\Beabest\justVRTest_Data\Managed\DOTween50.dll into Unity Child Domain
-- Completed reload, in  0.465 seconds
+- Completed reload, in  0.349 seconds
 Platform assembly: G:\modele\LPPM2\Beabest\Beabest\justVRTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: G:\modele\LPPM2\Beabest\Beabest\justVRTest_Data\Managed\System.dll (this message is harmless)
 desktop: 1440x900 60Hz; virtual: 1440x900 at 0,0
