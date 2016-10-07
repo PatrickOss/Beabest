@@ -100,6 +100,7 @@ ModelImporter:
     2300056: Cylinder_028
     2300058: Cylinder_029
     2300060: Cylinder_030
+    2300062: //RootNode
     3300000: Cylinder
     3300002: Cylinder_001
     3300004: Cylinder_002
@@ -131,6 +132,7 @@ ModelImporter:
     3300056: Cylinder_028
     3300058: Cylinder_029
     3300060: Cylinder_030
+    3300062: //RootNode
     4300000: Cylinder_030
     4300002: Cylinder_029
     4300004: Cylinder_028
@@ -171,7 +173,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -189,11 +191,11 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 0
+    meshCompression: 2
     addColliders: 0
     importBlendShapes: 1
-    swapUVChannels: 0
-    generateSecondaryUV: 0
+    swapUVChannels: 1
+    generateSecondaryUV: 1
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
