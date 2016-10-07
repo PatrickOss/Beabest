@@ -3,6 +3,7 @@ using System.Collections;
 
 public class EQhandler : MonoBehaviour {
 
+     
     public GameObject shieldsystem;
     public GameObject EQsystem;
 

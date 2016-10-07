@@ -3,7 +3,6 @@ using System.Collections;
 
 public class BasicSwingSwrod : MonoBehaviour
 {
-
     public Animator anim;
     public GameObject pauserGameobject;
     public GameObject character;

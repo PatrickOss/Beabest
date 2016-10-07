@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SwordswingforVR : MonoBehaviour
+public class BasicSwingSword : MonoBehaviour
 {
 
     public Animator anim;
@@ -11,18 +11,14 @@ public class SwordswingforVR : MonoBehaviour
     public PauseMenuMy pauser;
     public shieldhandler shieldIsOn;
 
-    public bool ifSword = true;
+    public bool ifSword = true; 
     public bool ifAxe = false;
 
     public int animnumber; //which animation to play?
+
     void Start()
     {
-        character = GameObject.Find("Main Camera (head)");
-        pauserGameobject = GameObject.Find("FPSController");
-
-        pauser = pauserGameobject.GetComponent<PauseMenuMy>();
-        shieldIsOn = character.GetComponent<shieldhandler>();
-        anim = GetComponent<Animator>();
+        loader();
     }
 
     void Update()
@@ -39,7 +35,7 @@ public class SwordswingforVR : MonoBehaviour
                     //sword animation code
                     if (animnumber == 0)
                     {
-                        anim.Play("swingSwordOne", -1, 0f);
+                        anim.Play("swingSwordTwo", -1, 0f);
                     }
                     if (animnumber == 1)
                     {
@@ -47,14 +43,30 @@ public class SwordswingforVR : MonoBehaviour
                     }
                     if (animnumber == 2)
                     {
-                        anim.Play("swingSwordThree", -1, 0f);
+                        anim.Play("swingSwordTwo", -1, 0f);                      
                     }
                 }
                 if (ifAxe && ifSword == false)//checks if player weights axe
                 {
                     //axe animation code
                 }
-            }
+            } 
         }
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("swingSwordTwo"))
+        {
+            shieldIsOn.animIsPlaing = true;
+        }
+        else
+        {
+            shieldIsOn.animIsPlaing = false;
+        }
+    }
+    void loader ()
+    {
+        character = GameObject.Find("FirstPersonCharacter");
+        pauserGameobject = GameObject.Find("FPSController");
+        pauser = pauserGameobject.GetComponent<PauseMenuMy>();
+        shieldIsOn = character.GetComponent<shieldhandler>();
+        anim = GetComponent<Animator>();
     }
 }

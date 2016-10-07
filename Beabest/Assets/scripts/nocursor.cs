@@ -8,25 +8,22 @@ public class nocursor : MonoBehaviour {
     public PauseMenuMy pausemenu;
    
     void Start()
-    {
-       
-        pauseGameobject = GameObject.Find("PauseMenuHandler");
-        pausemenu = GetComponent<PauseMenuMy>();
-        
+    {      
+      //  pauseGameobject = GameObject.Find("PauseMenuHandler");
+       // pausemenu = GetComponent<PauseMenuMy>();       
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     void Update()
     {
-        pausemenu.changer = changed;
+       // pausemenu.changer = changed;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             changed = !changed;
         }
         if (changed == false)
         {
-
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }

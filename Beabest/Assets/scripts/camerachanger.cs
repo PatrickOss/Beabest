@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.Characters.FirstPerson;
+
 
 public class camerachanger : MonoBehaviour {
 
-    bool przelaczona = true;
+    public bool przelaczona = true;
+
+    public FirstPersonController cont;
     public GameObject camera1;
     public GameObject camera2;
+    public Camera eyeCam;
 
     void Awake()
     {
-        camera1.GetComponent<Camera>();
-        camera2.GetComponent<Camera>();
-        camera2.SetActive(false);
+        loader();
     }
     // Update is called once per frame
     void Update()
@@ -20,15 +23,22 @@ public class camerachanger : MonoBehaviour {
         {
             przelaczona = !przelaczona;
         }
-        if (przelaczona == false)
+        if (przelaczona)
         {
             camera1.SetActive(true);
             camera2.SetActive(false);
+            cont.m_Camera = camera1.GetComponent<Camera>();
         }
-        if (przelaczona == true)
+        if (przelaczona == false)
         {
             camera1.SetActive(false);
             camera2.SetActive(true);
+            cont.m_Camera = eyeCam;  
         }
+    }
+    void loader ()
+    {
+        camera1.GetComponent<Camera>();
+        camera2.GetComponent<Camera>();
     }
 }

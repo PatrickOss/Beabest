@@ -1,0 +1,17 @@
+﻿using UnityEngine;
+using UnityEngine.VR;
+using System.Collections;
+namespace VRStandardAssets.Examples
+{
+    public class renderscale : MonoBehaviour
+    {
+
+        [SerializeField]
+        private float m_RenderScale = 1f;              //The render scale. Higher numbers = better quality, but trades performance
+
+        void Start()
+        {
+            VRSettings.renderScale = m_RenderScale;
+        }
+    }
+}
